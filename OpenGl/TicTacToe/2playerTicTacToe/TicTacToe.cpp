@@ -1,3 +1,6 @@
+/*
+
+*/
 #include <GL/glut.h>
 #include <iostream>
 #include <math.h>
@@ -7,7 +10,7 @@
 
 int board[3][3];	// board for gameplay
 int turn;			// current move
-int result;			// Result of the game
+int result;			// 게임의 결과
 bool over;			// Is the game Over?
 
 /*
@@ -20,7 +23,7 @@ void Intialize()
 	{
 		for(int j=0;j<3;j++)
 			board[i][j]=0;
-	}
+	}//보드를 초기화함
 }
 /*
 	Called when any key from keyboard is pressed
