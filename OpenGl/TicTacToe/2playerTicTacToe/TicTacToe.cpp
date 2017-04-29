@@ -1,10 +1,11 @@
-#include <GL/glut.h>
 #include <iostream>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <glut.h>
 
+int stage=1;//시작화면, 게임화면, 종료화면으로 나눔
 int board[3][3];	// board for gameplay
 int turn;			// current move
 int result;			// Result of the game
@@ -52,25 +53,36 @@ void OnKeyPress(unsigned char key,int x,int y)
 */
 void OnMouseClick(int button,int state,int x,int y)	
 {
-	if(over==false && button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
+	if(stage==1) //시작화면
 	{
-		if(turn==1)
+
+	}
+	else if(stage==2) //게임화면
+	{
+		if(over==false && button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
 		{
-			if(board[(y-50)/100][x/100]==0)
+			if(turn==1)
 			{
-				board[(y-50)/100][x/100]=1;
-				turn=2;
+				if(board[(y-50)/100][x/100]==0)
+				{
+					board[(y-50)/100][x/100]=1;
+					turn=2;
+				}
+			}
+			else if(turn==2)
+			{
+				if(board[(y-50)/100][x/100]==0)
+				{
+					board[(y-50)/100][x/100]=2;
+					turn=1;
+				}
 			}
 		}
-		else if(turn==2)
-		{
-			if(board[(y-50)/100][x/100]==0)
-			{
-				board[(y-50)/100][x/100]=2;
-				turn=1;
-			}
-		}
-	}	
+	}
+	else if(stage==3) //
+	{
+
+	}
 }
 
 /*
@@ -216,45 +228,60 @@ bool CheckIfDraw()
 */
 void Display()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(1, 1, 1, 1);
-	glColor3f(0, 0, 0);
-	if(turn == 1)
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Player1's turn", 100, 30);	
-	else
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Player2's turn", 100, 30);	
-	
-	DrawLines();
-	DrawXO();
-	
-	if(CheckWinner() == true)
+	if(stage==1)
 	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(1,1,1,1);
+		
+
+	}
+	else if(stage==2)
+	{
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(1, 1, 1, 1);
+		glColor3f(0, 0, 0);
 		if(turn == 1)
-		{
-			over = true;
-			result = 2;
-		}
+			DrawString(GLUT_BITMAP_HELVETICA_18, "Player1's turn", 100, 30);	
 		else
+			DrawString(GLUT_BITMAP_HELVETICA_18, "Player2's turn", 100, 30);	
+	
+		DrawLines();
+		DrawXO();
+	
+		if(CheckWinner() == true)
+		{
+			if(turn == 1)
+			{
+				over = true;
+				result = 2;
+			}
+			else
+			{
+				over = true;
+				result = 1; 
+			}
+		}
+		else if(CheckIfDraw() == true)
 		{
 			over = true;
-			result = 1; 
+			result = 0;
+		}
+		if(over == true)
+		{
+			DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
+			if(result == 0)
+				DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 110, 185);
+			if(result == 1)
+				DrawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
+			if(result == 2)
+				DrawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
+			DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
 		}
 	}
-	else if(CheckIfDraw() == true)
+	else if(stage==3)
 	{
-		over = true;
-		result = 0;
-	}
-	if(over == true)
-	{
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
-		if(result == 0)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 110, 185);
-		if(result == 1)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
-		if(result == 2)
-			DrawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
-		DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(1,1,1,1);
 	}
 	glutSwapBuffers();
 }
