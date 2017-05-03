@@ -23,6 +23,87 @@ void Intialize()
 			board[i][j]=0;
 	}
 }
+void start(int x,int y) //시작버튼
+{
+	glColor3f(0,0,0);
+	glBegin(GL_LINES);	
+	glVertex2f(10,20);
+	glVertex2f(60,20);
+	glVertex2f(10,20);
+	glVertex2f(10,90);
+	glVertex2f(10,90);
+	glVertex2f(60,90);
+	glVertex2f(60,90);
+	glVertex2f(60,160);
+	glVertex2f(60,160);
+	glVertex2f(10,160);
+	glEnd();
+	glBegin(GL_LINES);	
+	glVertex2f(70,20);
+	glVertex2f(120,20);
+	glVertex2f(95,20);
+	glVertex2f(95,160);
+	glEnd();
+	glBegin(GL_LINES);	
+	glVertex2f(130,20);
+	glVertex2f(130,160);
+	glVertex2f(130,20);
+	glVertex2f(175,20);
+	glVertex2f(175,20);
+	glVertex2f(175,160);
+	glVertex2f(130,90);
+	glVertex2f(175,90);
+	glEnd();
+	glBegin(GL_LINES);	
+	glVertex2f(185,20);
+	glVertex2f(185,160);
+	glVertex2f(185,20);
+	glVertex2f(230,20);
+	glVertex2f(185,90);
+	glVertex2f(230,90);
+	glVertex2f(230,20);
+	glVertex2f(230,90);
+	glVertex2f(185,90);
+	glVertex2f(230,160);
+	glEnd();
+	glBegin(GL_LINES);	
+	glVertex2f(240,20);
+	glVertex2f(290,20);
+	glVertex2f(265,20);
+	glVertex2f(265,160);
+	glEnd();
+}
+void select(int x,int y,int r) //말 선택 메뉴
+{
+	glBegin(GL_LINES);
+	glColor3f(0,0,0);
+	glVertex2f(10,340);
+	glVertex2f(10,190);
+	glVertex2f(10,190);
+	glVertex2f(140,190);
+	glVertex2f(140,190);
+	glVertex2f(140,340);
+	glVertex2f(140,340);
+	glVertex2f(10,340);
+	glEnd();
+
+}
+
+void rule(int x,int y) //규칙 설명 메뉴
+{
+	glBegin(GL_LINES);
+	glColor3f(0,0,0);
+	glVertex2f(160,340);
+	glVertex2f(160,190);
+	glVertex2f(160,190);
+	glVertex2f(290,190);
+	glVertex2f(290,190);
+	glVertex2f(290,340);
+	glVertex2f(290,340);
+	glVertex2f(160,340);
+	glEnd();
+}
+
 /*
 	Called when any key from keyboard is pressed
 */
@@ -35,6 +116,7 @@ void OnKeyPress(unsigned char key,int x,int y)
 		{
 			over=false;
 			Intialize();
+			stage=2;
 		}
 		break;
 		case 'n':
@@ -53,11 +135,16 @@ void OnKeyPress(unsigned char key,int x,int y)
 */
 void OnMouseClick(int button,int state,int x,int y)	
 {
-	if(stage==1) //시작화면
+	if(stage==1)
 	{
+		if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN && x>10 && x<290 && y>20 && y<160)
+		{
+			stage=2;
+			glutPostRedisplay();
+		}
 
 	}
-	else if(stage==2) //게임화면
+	else if(stage==2)
 	{
 		if(over==false && button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
 		{
@@ -79,7 +166,7 @@ void OnMouseClick(int button,int state,int x,int y)
 			}
 		}
 	}
-	else if(stage==3) //
+	else if(stage==3)
 	{
 
 	}
@@ -232,8 +319,9 @@ void Display()
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(1,1,1,1);
-		
-
+		select(0,0,0);
+		rule(0,0);
+		start(0,0);
 	}
 	else if(stage==2)
 	{
@@ -268,20 +356,23 @@ void Display()
 		}
 		if(over == true)
 		{
-			DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
-			if(result == 0)
-				DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 110, 185);
-			if(result == 1)
-				DrawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
-			if(result == 2)
-				DrawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
-			DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
+			stage=3;
+			
 		}
 	}
 	else if(stage==3)
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(1,1,1,1);
+	DrawString(GLUT_BITMAP_HELVETICA_18, "Game Over", 100, 160);
+				if(result == 0)
+					DrawString(GLUT_BITMAP_HELVETICA_18, "It's a draw", 110, 185);
+				if(result == 1)
+					DrawString(GLUT_BITMAP_HELVETICA_18, "Player1 wins", 95, 185);
+				if(result == 2)
+					DrawString(GLUT_BITMAP_HELVETICA_18, "Player2 wins", 95, 185);
+				DrawString(GLUT_BITMAP_HELVETICA_18, "Do you want to continue (y/n)", 40, 210);
+
 	}
 	glutSwapBuffers();
 }
