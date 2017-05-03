@@ -5,14 +5,14 @@
 #include <string.h>
 #include <glut.h>
 
-int stage=1;//시작화면, 게임화면, 종료화면으로 나눔
-int board[3][3];	// board for gameplay
-int turn;			// current move
-int result;			// Result of the game
-bool over;			// Is the game Over?
+int stage=1;// 시작화면(1), 게임화면(2), 종료화면(3)으로 나눔, 첫 화면은 시작화면이므로 1로 초기화
+int board[3][3];	// 게임 보드판
+int turn;			// 현재의 턴(player1 or player2)
+int result;			// 게임의 결과
+bool over;			// 게임 종료 여부
 
 /*
-	Sets the board for Tic Tac Toe
+보드판을 초기화 함
 */
 void Intialize()
 {
@@ -23,7 +23,11 @@ void Intialize()
 			board[i][j]=0;
 	}
 }
-void start(int x,int y) //시작버튼
+
+/*
+START 버튼으로 누르면 게임이 시작되도록 함
+*/
+void start(int x,int y)
 {
 	glColor3f(0,0,0);
 	glBegin(GL_LINES);	
@@ -73,7 +77,11 @@ void start(int x,int y) //시작버튼
 	glVertex2f(265,160);
 	glEnd();
 }
-void select(int x,int y,int r) //말 선택 메뉴
+
+/*
+말선택 메뉴 부분 자리를 만들어 놓음
+*/
+void select(int x,int y,int r) 
 {
 	glBegin(GL_LINES);
 	glColor3f(0,0,0);
@@ -89,7 +97,10 @@ void select(int x,int y,int r) //말 선택 메뉴
 
 }
 
-void rule(int x,int y) //규칙 설명 메뉴
+/*
+규칙설명 메뉴 부분 자리를 만들어 놓음
+*/
+void rule(int x,int y) 
 {
 	glBegin(GL_LINES);
 	glColor3f(0,0,0);
@@ -105,7 +116,7 @@ void rule(int x,int y) //규칙 설명 메뉴
 }
 
 /*
-	Called when any key from keyboard is pressed
+키보드함수 : y를 누르면 게임 다시 시작, n을 누르면 게임 종료, 다른 버튼 누르면 게임 종료
 */
 void OnKeyPress(unsigned char key,int x,int y)
 {
@@ -131,7 +142,8 @@ void OnKeyPress(unsigned char key,int x,int y)
 }
 
 /*
-	Called when Mouse is clicked 
+마우스함수 : stage가 1일때 start버튼을 누르면 게임 시작으로 stage가 2로 넘어감
+	    stage가 2일때 player가 누른 자리에 아무 말도 놓여 있지 않을때 자신의 말을 놓고 turn을 넘겨줌
 */
 void OnMouseClick(int button,int state,int x,int y)	
 {
@@ -166,14 +178,11 @@ void OnMouseClick(int button,int state,int x,int y)
 			}
 		}
 	}
-	else if(stage==3)
-	{
-
-	}
+	
 }
 
 /*
-	Utility function to draw string 	
+누구의 순서인지 알려주거나 누가 이겼는지 알려줌
 */
 void DrawString(void *font,const char s[],float x,float y)
 {
@@ -186,7 +195,7 @@ void DrawString(void *font,const char s[],float x,float y)
 }
 
 /*
-	Function to draw up the horizontal and vertical lines
+보드판 선을 그림
 */
 void DrawLines()
 {
@@ -207,7 +216,7 @@ void DrawLines()
 }
 
 /*
-	Utility function to draw the circle
+Player2 말 모양인 O를 
 */
 void DrawCircle(float cx, float cy, float r, int num_segments) 
 {
