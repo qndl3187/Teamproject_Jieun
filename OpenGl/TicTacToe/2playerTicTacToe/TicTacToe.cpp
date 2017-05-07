@@ -46,8 +46,7 @@ void Intialize()
 void StartButton(int x,int y)
 {
 	glColor3f(1,1,1);
-	glLineWidth(10);
-	
+	glLineWidth(10);	
 	//S 나타내기
 	glBegin(GL_LINES);		
 		glVertex2f(15,20);
@@ -65,7 +64,6 @@ void StartButton(int x,int y)
 		glVertex2f(60,160);
 		glVertex2f(15,160);
 	glEnd();
-
 	//T 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(70,20);
@@ -74,7 +72,6 @@ void StartButton(int x,int y)
 		glVertex2f(95,20);
 		glVertex2f(95,160);
 	glEnd();
-
 	//A 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(130,20);
@@ -89,7 +86,6 @@ void StartButton(int x,int y)
 		glVertex2f(130,90);
 		glVertex2f(175,90);
 	glEnd();
-
 	//R 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(185,20);
@@ -107,7 +103,6 @@ void StartButton(int x,int y)
 		glVertex2f(185,90);
 		glVertex2f(230,160);
 	glEnd();
-
 	//T 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(240,20);
@@ -213,7 +208,6 @@ void Rule(int x,int y)
 
 		glVertex2f(260,285);
 		glVertex2f(280,285);
-
 	glEnd();
 }
 
@@ -285,7 +279,7 @@ void OnMouseClick(int button,int state,int x,int y)
 }
 
 /*
-	누구의 순서인지, 누가 이겼는지 텍스트 형식으로 알려주는 함수
+	누구의 순서인지, 누가 이겼는지 비트맵 형식으로 알려주는 함수
 */
 void DrawString(void *font,const char s[],float x,float y)
 {
@@ -319,22 +313,6 @@ void DrawLines()
 }
 
 /*
-	Player2 말 모양인 O를 그림
-*/
-void DrawCircle(float cx, float cy, float r, int num_segments) 
-{
-    glBegin(GL_LINE_LOOP);
-    for (int i = 0; i < num_segments; i++)   
-    {
-        float theta = 2.0f * PI * float(i) / float(num_segments);//현재 각도를 얻음 
-        float x = r * cosf(theta);// x 값 계산 
-        float y = r * sinf(theta);// y 값 계산
-        glVertex2f(x + cx, y + cy);
-    }
-    glEnd();
-}
-
-/*
 	Player1 말 모양인 X를 그림
 */
 void DrawCross(float cx, float cy)
@@ -346,6 +324,25 @@ void DrawCross(float cx, float cy)
 		glVertex2f(cx+25,cy-25);
 	glEnd();
 }
+
+/*
+	Player2 말 모양인 O를 그림
+*/
+void DrawCircle(float cx, float cy, float r, int num_segments) 
+{
+    glBegin(GL_LINE_LOOP);
+    for (int i = 0; i < num_segments; i++)   
+    {
+        float theta;
+	theta = 2.0f * PI* float(i);
+	theta = theta / float(num_segments);//현재 각도를 얻음 
+        float x = r * cosf(theta);// x 값 계산 
+        float y = r * sinf(theta);// y 값 계산
+        glVertex2f(x + cx, y + cy);
+    }
+    glEnd();
+}
+
 
 /*
 	보드판 안에 X,O를 그리는 함수
@@ -465,7 +462,7 @@ void Display()
 		DrawLines();
 		DrawXO();
 	
-		//승리자  
+		//승리자 검사 
 		if(CheckWinner() == true)
 		{
 			if(turn == 1)
@@ -479,6 +476,8 @@ void Display()
 				result = 1; 
 			}
 		}
+
+		//무승부 검사
 		else if(CheckIfDraw() == true)
 		{
 			over = true;
