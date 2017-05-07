@@ -16,13 +16,16 @@
 #include <time.h>
 #include <string.h>
 #include <glut.h>
-#define PI 3.141592
+#define PI 3.141592 //PI를 3.141592로 정의해둠
 
 int stage=1;		// 시작화면(1), 게임화면(2), 종료화면(3)으로 나눔, 첫 화면은 시작화면이므로 1로 초기화
 int board[3][3];	// 게임 보드판
 int turn;			// 현재의 턴(player1 or player2)
 int result;			// 게임의 결과
 bool over;			// 게임 종료 여부
+
+void DrawCircle(float cx, float cy, float r, int num_segments); //말 선택 메뉴에 이 함수를 쓰기 위해 미리 함수 원형을 선언함
+void DrawCross(float cx, float cy);//말 선택 메뉴에 이 함수를 쓰기 위해 미리 함수 원형을 선언함
 
 /*
 	보드판을 초기화 하는 함수
@@ -40,11 +43,13 @@ void Intialize()
 /*
 	START 버튼
 */
-void start(int x,int y)
+void StartButton(int x,int y)
 {
 	glColor3f(1,1,1);
 	glLineWidth(10);
-	glBegin(GL_LINES);	
+	
+	//S 나타내기
+	glBegin(GL_LINES);		
 		glVertex2f(15,20);
 		glVertex2f(60,20);
 
@@ -61,6 +66,7 @@ void start(int x,int y)
 		glVertex2f(15,160);
 	glEnd();
 
+	//T 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(70,20);
 		glVertex2f(120,20);
@@ -69,6 +75,7 @@ void start(int x,int y)
 		glVertex2f(95,160);
 	glEnd();
 
+	//A 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(130,20);
 		glVertex2f(130,160);
@@ -83,6 +90,7 @@ void start(int x,int y)
 		glVertex2f(175,90);
 	glEnd();
 
+	//R 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(185,20);
 		glVertex2f(185,160);
@@ -100,6 +108,7 @@ void start(int x,int y)
 		glVertex2f(230,160);
 	glEnd();
 
+	//T 나타내기
 	glBegin(GL_LINES);	
 		glVertex2f(240,20);
 		glVertex2f(290,20);
@@ -112,10 +121,11 @@ void start(int x,int y)
 /*
 	말선택 메뉴 부분 자리
 */
-void select(int x,int y,int r) 
+void Select(int x,int y,int r) 
 {
 	glBegin(GL_LINES);
 	glColor3f(0.5,0.7,0.4);
+		//사각형 만들기
 		glVertex2f(10,340);
 		glVertex2f(10,190);
 		
@@ -127,17 +137,22 @@ void select(int x,int y,int r)
 		
 		glVertex2f(140,340);
 		glVertex2f(10,340);
-	glEnd();
 
+		glVertex2f(10,340);
+		glVertex2f(140,190);
+	glEnd();
+	DrawCircle(45,240,25,15);
+	DrawCross(105,300);
 }
 
 /*
 	규칙설명 메뉴 부분 자리
 */
-void rule(int x,int y) 
+void Rule(int x,int y) 
 {
 	glBegin(GL_LINES);
 	glColor3f(0.5,0.7,0.4);
+		//사각형 만들기
 		glVertex2f(160,340);
 		glVertex2f(160,190);
 		
@@ -149,6 +164,56 @@ void rule(int x,int y)
 		
 		glVertex2f(290,340);
 		glVertex2f(160,340);
+
+		//R 나타내기
+		glVertex2f(170,245);
+		glVertex2f(190,245);
+		
+		glVertex2f(170,245);
+		glVertex2f(170,265);
+		
+		glVertex2f(170,265);
+		glVertex2f(190,265);
+		
+		glVertex2f(190,265);
+		glVertex2f(190,245);
+		
+		glVertex2f(170,265);
+		glVertex2f(190,285);
+		
+		glVertex2f(170,265);
+		glVertex2f(170,285);
+		
+		//U 나타내기
+		glVertex2f(200,245);
+		glVertex2f(200,285);
+
+		glVertex2f(200,285);
+		glVertex2f(220,285);
+		
+		glVertex2f(220,285);
+		glVertex2f(220,245);
+		
+		//L 나타내기
+		glVertex2f(230,245);
+		glVertex2f(230,285);
+		
+		glVertex2f(250,285);
+		glVertex2f(230,285);
+		
+		//E 나타내기
+		glVertex2f(260,245);
+		glVertex2f(280,245);
+
+		glVertex2f(260,245);
+		glVertex2f(260,285);
+
+		glVertex2f(260,265);
+		glVertex2f(280,265);
+
+		glVertex2f(260,285);
+		glVertex2f(280,285);
+
 	glEnd();
 }
 
@@ -381,9 +446,9 @@ void Display()
 	{
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.7,0.4,0.7,1);
-		select(0,0,0);
-		rule(0,0);
-		start(0,0);
+		Select(0,0,0);
+		Rule(0,0);
+		StartButton(0,0);
 	}
 
 	//게임 화면 일때
@@ -473,4 +538,3 @@ int main(int argc, char **argv)
     glutMainLoop();
     return 0;
 }
-
